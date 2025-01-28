@@ -1,0 +1,7 @@
+# React ignore
+
+# Java Spring Boot ignore
+target/
+
+# Ds_Store ignore at any level
+**/.DS_Store
