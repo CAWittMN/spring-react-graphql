@@ -1,18 +1,16 @@
-package com.example.graphql_books.dtos;
+package com.example.graphql_gateway.types;
 
-import com.example.graphql_books.models.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO {
+public class Book {
 
     private Long id;
 
@@ -22,16 +20,28 @@ public class BookDTO {
 
     private String title;
 
-    private LocalDate publishedDate;
+    private LocalDateTime publishedDate;
 
     private String blurb;
 
     private Long authorId;
 
+    private Author author;
+
     private Long publisherId;
+
+    private Publisher publisher;
 
     private Double price;
 
     private String genre;
+
+    private Integer amountInStock;
+
+    private Integer amountSold;
+
+    private Float overallRating;
+
+    private List<Review> reviews;
 
 }

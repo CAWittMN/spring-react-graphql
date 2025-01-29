@@ -1,0 +1,144 @@
+type Query {
+    books: [Book]
+    booksByGenre(genre: String): [Book]
+    booksByAuthor(authorId: Int): [Book]
+    booksByPublisher(publisherId: Int): [Book]
+    booksByTitle(title: String): [Book]
+    booksByFilter(filter: BookFilterInput): [Book]
+    book(id: Int): Book
+    authors: [Author]
+    author(id: Int): Author
+    publishers: [Publisher]
+    publisher(id: Int): Publisher
+    reviews(bookId: Int): [Review]
+    userReviews(userId: Int): [Review]
+    review(id: Int): Review
+    purchasesByUserId(userId: Int): [Purchase]
+    purchasedBooks(userId: Int): [Book]
+    purchase(id: Int): Purchase
+    user(id: Int): User
+}
+
+type Mutation {
+    makePurchase(purchase: PurchaseInput): Purchase
+    postReview(review: ReviewInput): Review
+    editReview(id: Int, review: ReviewInput): Review
+    deleteReview(id: Int): Review
+    cancelPurchase(id: Int): Boolean
+}
+
+type Book {
+    id: Int
+    title: String
+    genre: String
+    price: Float
+    blurb: String
+    authorId: Int
+    author: Author
+    isbn: String
+    publishedDate: String
+    publisherId: Int
+    publisher: Publisher
+    overallRating: Float
+    reviews: [Review]
+    amountSold: Int
+    amountInStock: Int
+}
+
+type Author {
+    id: Int
+    firstName: String
+    lastName: String
+}
+
+type Publisher {
+    id: Int
+    name: String
+    address: String
+    city: String
+    state: String
+    zip: String
+    country: String
+    email: String
+    phoneNumber: String
+}
+
+type Review {
+    id: Int
+    bookId: Int
+    book: Book
+    rating: Int
+    title: String
+    body: String
+    createdAt: String
+    userId: Int
+    username: String
+}
+
+type User {
+    id: Int
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    role: String
+    reviews: [Review]
+    purchases: [Purchase]
+    purchasedBookIds: [Int]
+}
+
+type Purchase {
+    id: Int
+    userId: Int
+    totalAmount: Float
+    status: String
+    purchaseDate: String
+    lastUpdated: String
+    bookPurchases: [BookPurchase]
+}
+
+type BookPurchase {
+    bookId: Int
+    purchaseId: Int
+    totalPrice: Float
+    quantity: Int
+    book: Book
+}
+
+input BookFilterInput {
+    genre: String
+    authorName: String
+    publisherName: String
+    isbn: String
+    minPrice: Float
+    maxPrice: Float
+    minOverallRating: Int
+    maxOverallRating: Int
+    minAmountSold: Int
+    maxAmountSold: Int
+    minPublishedDate: String
+    maxPublishedDate: String
+    sortBy: String
+    sortOrder: String
+}
+
+input PurchaseInput {
+    userId: Int
+    bookPurchases: [BookPurchaseInput]
+    totalAmount: Float
+}
+
+input BookPurchaseInput {
+    bookId: Int
+    quantity: Int
+    totalPrice: Float
+}
+
+input ReviewInput {
+    bookId: Int
+    rating: Int
+    title: String
+    body: String
+    userId: Int
+}
+
