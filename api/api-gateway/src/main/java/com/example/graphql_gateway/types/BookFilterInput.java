@@ -20,8 +20,6 @@ public class BookFilterInput {
     private Integer maxPages;
     private Integer minPrice;
     private Integer maxPrice;
-    private Integer minAmountInStock;
-    private Integer maxAmountInStock;
     private Integer minAmountSold;
     private Integer maxAmountSold;
     private Float minOverallRating;

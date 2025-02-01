@@ -22,7 +22,7 @@ public class UserService {
 
     public Mono<User> getUserById(Long id) {
         return webClient.get()
-                .uri(userServiceUrl + "/{id}", id)
+                .uri(userServiceUrl + "/graphql/{id}", id)
                 .retrieve()
                 .bodyToMono(User.class);
     }

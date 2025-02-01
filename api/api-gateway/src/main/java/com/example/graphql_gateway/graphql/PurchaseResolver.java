@@ -3,10 +3,7 @@ package com.example.graphql_gateway.graphql;
 import com.example.graphql_gateway.services.BookService;
 import com.example.graphql_gateway.services.PurchaseService;
 import com.example.graphql_gateway.services.UserService;
-import com.example.graphql_gateway.types.Book;
-import com.example.graphql_gateway.types.BookPurchase;
-import com.example.graphql_gateway.types.Purchase;
-import com.example.graphql_gateway.types.User;
+import com.example.graphql_gateway.types.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -51,9 +48,15 @@ public class PurchaseResolver {
     // this needs to iterate over the purchases and in each purchase, iterate over the bookPurchases property and get the bookId
     @QueryMapping
     public Flux<Book> purchasedBooks(@Argument Long userId) {
-        return purchaseService.getPurchasesByUserId(userId)
-                .flatMap(purchase -> Flux.fromIterable(purchase.getBookPurchases()))
-                .flatMap(bookPurchase -> bookService.getBookById(bookPurchase.getBookId()));
+        List<Long> uniqueIds = purchaseService.getPurchasesByUserId(userId)
+                .map(Purchase::getBookPurchases)
+                .flatMap(Flux::fromIterable)
+                .map(BookPurchase::getBookId)
+                .distinct()
+                .collectList()
+                .blockOptional()
+                .orElse(Collections.emptyList());
+        return bookService.getBooksByIds(uniqueIds);
 
     }
 
@@ -77,8 +80,9 @@ public class PurchaseResolver {
     // Mutations
 
     @MutationMapping
-    public Mono<Purchase> createPurchase(@Argument Purchase purchase) {
-        return purchaseService.createPurchase(purchase);
+    public Mono<Purchase> makePurchase(@Argument PurchaseInput purchaseInput) {
+        System.out.println(purchaseInput);
+        return purchaseService.createPurchase(purchaseInput);
     }
 
 }

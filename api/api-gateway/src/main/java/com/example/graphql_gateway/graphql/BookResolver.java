@@ -1,9 +1,6 @@
 package com.example.graphql_gateway.graphql;
 
-import com.example.graphql_gateway.services.AuthorService;
-import com.example.graphql_gateway.services.BookService;
-import com.example.graphql_gateway.services.PublisherService;
-import com.example.graphql_gateway.services.ReviewService;
+import com.example.graphql_gateway.services.*;
 import com.example.graphql_gateway.types.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -13,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Controller
 public class BookResolver {
 
@@ -20,14 +19,17 @@ public class BookResolver {
     private final AuthorService authorService;
     private final PublisherService publisherService;
     private final ReviewService reviewService;
+    private final PurchaseService purchaseService;
 
     @Autowired
     public BookResolver(BookService bookService, AuthorService authorService,
-                        PublisherService publisherService, ReviewService reviewService) {
+                        PublisherService publisherService, ReviewService reviewService,
+                        PurchaseService purchaseService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.publisherService = publisherService;
         this.reviewService = reviewService;
+        this.purchaseService = purchaseService;
     }
 
     @QueryMapping
@@ -81,4 +83,30 @@ public class BookResolver {
         return reviewService.getReviewsByBookId(book.getId());
     }
 
+    @SchemaMapping(typeName = "Book", field = "amountSold")
+    public Mono<Integer> getAmountSold(Book book) {
+        return purchaseService.getAmountSold(book.getId());
+    }
+
+    @SchemaMapping(typeName = "Book", field = "overallRating")
+    public Mono<Double> getOverallRating(Book book) {
+        return reviewService.getOverallRating(book.getId());
+    }
+
+    @SchemaMapping(typeName = "Book", field = "genre")
+    public Genre getGenre(Book book) {
+        return book.getGenre();
+    }
+
+    @SchemaMapping(typeName = "Book", field = "likes")
+    // get all reviews by book id and then sum the number of isLiked = true
+    public Mono<Long> getLikes(Book book) {
+        return reviewService.getLikesByBookId(book.getId());
+    }
+
+    @SchemaMapping(typeName = "Book", field = "dislikes")
+    // get all reviews by book id and then sum the number of isLiked = false
+    public Mono<Long> getDislikes(Book book) {
+        return reviewService.getDislikesByBookId(book.getId());
+    }
 }

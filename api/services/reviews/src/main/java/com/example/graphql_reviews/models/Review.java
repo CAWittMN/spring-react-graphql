@@ -1,12 +1,11 @@
 package com.example.graphql_reviews.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,8 +26,11 @@ public class Review {
 
     private Long userId;
 
-    private Long likes;
+    private Boolean isLiked;
 
-    private Long dislikes;
+    private Boolean isDisliked;
+
+    @OneToMany(mappedBy = "reviewId")
+    private List<LikeOrDislike> likesAndDislikes;
 
 }

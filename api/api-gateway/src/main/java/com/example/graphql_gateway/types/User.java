@@ -19,26 +19,12 @@ public class User {
 
     private String lastName;
 
-    private String email;
-
-    private String phoneNumber;
-
-    private String address;
-
-    private String city;
-
-    private String state;
-
-    private String zipCode;
-
-    private String country;
-
-    private String role;
-
     private List<Review> reviews;
 
     private List<Purchase> purchases;
 
     private List<Long> purchasedBookIds;
+
+    private List<ReviewLike> reviewLikes;
 
 }

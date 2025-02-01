@@ -6,7 +6,6 @@ import com.example.graphql_books.mappers.BookMapper;
 import com.example.graphql_books.models.Book;
 import com.example.graphql_books.repositories.BookRepository;
 import com.example.graphql_books.repositories.GenreRepository;
-import com.example.graphql_books.repositories.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +16,13 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
-    private final PublisherRepository publisherRepository;
     private final BookMapper bookMapper;
 
     @Autowired
     public BookService(BookRepository bookRepository, GenreRepository genreRepository,
-                       PublisherRepository publisherRepository, BookMapper bookMapper) {
+                        BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
-        this.publisherRepository = publisherRepository;
         this.bookMapper = bookMapper;
     }
 
@@ -38,6 +35,30 @@ public class BookService {
                 new RuntimeException("Book not found")));
     }
 
+    public List<BookDTO> getBooksByAuthor(Long authorId) {
+        return bookMapper.toDTOList(bookRepository.findByAuthorId(authorId).orElseThrow(() ->
+                new RuntimeException("No books found for the given author")));
+    }
+
+    public List<BookDTO> getBooksByGenre(String genre) {
+        return bookMapper.toDTOList(bookRepository.findByGenreName(genre).orElseThrow(() ->
+                new RuntimeException("No books found for the given genre")));
+    }
+
+    public List<BookDTO> getBooksByPublisher(Long publisherId) {
+        return bookMapper.toDTOList(bookRepository.findByPublisherId(publisherId).orElseThrow(() ->
+                new RuntimeException("No books found for the given publisher")));
+    }
+
+    public List<BookDTO> getBooksByTitle(String title) {
+        return bookMapper.toDTOList(bookRepository.findByTitle(title).orElseThrow(() ->
+                new RuntimeException("No books found for the given title")));
+    }
+
+    public List<BookDTO> getBooksByIds(List<Long> ids) {
+        return bookMapper.toDTOList(bookRepository.findAllById(ids));
+    }
+
 
     public List<BookDTO> getBooksByFilter(FilterParams params) {
         return bookMapper.toDTOList(bookRepository.findByFilter(params).orElseThrow(() ->
@@ -45,15 +66,8 @@ public class BookService {
     }
 
     public BookDTO createBook(BookDTO bookDTO) {
-        Book book = new Book();
-        book.setTitle(bookDTO.getTitle());
-        book.setPageCount(bookDTO.getPageCount());
-        book.setSynopsis(bookDTO.getSynopsis());
-        book.setBlurb(bookDTO.getBlurb());
-        book.setAuthorId(bookDTO.getAuthorId());
-        book.setPublisher(publisherRepository.findById(bookDTO.getPublisherId()).orElseThrow(() ->
-                new RuntimeException("Publisher not found")));
-        book.setGenre(genreRepository.findByName(bookDTO.getGenre()).orElseThrow(() ->
+        Book book = bookMapper.toEntity(bookDTO);
+        book.setGenre(genreRepository.findById(bookDTO.getGenre().getId()).orElseThrow(() ->
                 new RuntimeException("Genre not found")));
         return bookMapper.toDTO(bookRepository.save(book));
     }
@@ -65,14 +79,8 @@ public class BookService {
     public BookDTO updateBook(BookDTO bookDTO) {
         Book book = bookRepository.findById(bookDTO.getId()).orElseThrow(() ->
                 new RuntimeException("Book not found"));
-        book.setTitle(bookDTO.getTitle());
-        book.setPageCount(bookDTO.getPageCount());
-        book.setSynopsis(bookDTO.getSynopsis());
-        book.setBlurb(bookDTO.getBlurb());
-        book.setAuthorId(bookDTO.getAuthorId());
-        book.setPublisher(publisherRepository.findById(bookDTO.getPublisherId()).orElseThrow(() ->
-                new RuntimeException("Publisher not found")));
-        book.setGenre(genreRepository.findById(bookDTO.getGenreId()).orElseThrow(() ->
+        book = bookMapper.toEntity(bookDTO);
+        book.setGenre(genreRepository.findById(bookDTO.getGenre().getId()).orElseThrow(() ->
                 new RuntimeException("Genre not found")));
         return bookMapper.toDTO(bookRepository.save(book));
     }

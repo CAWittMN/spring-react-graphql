@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +23,10 @@ public class ReviewDTO {
 
     private Long userId;
 
-    private Long likes;
+    private Boolean isLiked;
 
-    private Long dislikes;
+    private Boolean isDisliked;
+
+    private List<LikeOrDislikeDTO> likesAndDislikes;
 
 }

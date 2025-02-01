@@ -7,18 +7,17 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = GenreMapper.class)
 public interface BookMapper {
 
-    @Mapping(target = "publisherName", source = "publisher.name")
-    @Mapping(target = "publisherId", source = "publisher.id")
-    @Mapping(target = "genre", source = "genre.name")
-    @Mapping(target = "genreId", source = "genre.id")
+    @Mapping(target = "genre", source = "genre")
     BookDTO toDTO(Book source);
 
-    @Mapping(target = "publisherName", source = "publisher.name")
-    @Mapping(target = "publisherId", source = "publisher.id")
-    @Mapping(target = "genre", source = "genre.name")
-    @Mapping(target = "genreId", source = "genre.id")
+    Book toEntity(BookDTO source);
+
+    List<Book> toEntityList(List<BookDTO> source);
+
+
+    @Mapping(target = "genre", source = "genre")
     List<BookDTO> toDTOList(List<Book> source);
 }

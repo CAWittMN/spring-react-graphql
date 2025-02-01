@@ -11,8 +11,6 @@ public class BookPurchase {
 
     private Long id;
 
-    private Long purchaseId;
-
     private Long bookId;
 
     private Book book;

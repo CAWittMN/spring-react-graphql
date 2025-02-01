@@ -1,9 +1,11 @@
-package com.example.graphql_shopper.models;
+package com.example.graphql_user.models;
 
+import com.example.graphql_user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.List;
 
@@ -28,7 +30,17 @@ public class User {
 
     private String username;
 
-    @OneToMany(mappedBy = "user")
-    private List<Purchase> purchases;
+    private String phoneNumber;
+
+    private String address;
+
+    private String city;
+
+    private String state;
+
+    private String zipCode;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.CUSTOMER;
 
 }

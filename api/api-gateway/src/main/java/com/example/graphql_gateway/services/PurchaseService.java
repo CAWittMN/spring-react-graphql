@@ -1,6 +1,7 @@
 package com.example.graphql_gateway.services;
 
 import com.example.graphql_gateway.types.Purchase;
+import com.example.graphql_gateway.types.PurchaseInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class PurchaseService {
@@ -37,7 +40,7 @@ public class PurchaseService {
                 .bodyToFlux(new ParameterizedTypeReference<Purchase>() {});
     }
 
-    public Mono<Purchase> createPurchase(Purchase purchase) {
+    public Mono<Purchase> createPurchase(PurchaseInput purchase) {
         return webClient.post()
                 .uri(purchaseServiceUrl)
                 .body(Mono.just(purchase), Purchase.class)
@@ -58,5 +61,19 @@ public class PurchaseService {
                 .uri(purchaseServiceUrl + "cancel/{id}", id)
                 .retrieve()
                 .bodyToMono(Void.class);
+    }
+
+    public Mono<Integer> getAmountSold(Long bookId) {
+        return webClient.get()
+                .uri(purchaseServiceUrl + "/book/{bookId}/soldCount", bookId)
+                .retrieve()
+                .bodyToMono(Integer.class);
+    }
+
+    public Flux<Long> getPurchasedBookIdsByUserId(Long userId) {
+        return webClient.get()
+                .uri(purchaseServiceUrl + "/user/{userId}/bookIds", userId)
+                .retrieve()
+                .bodyToFlux(new ParameterizedTypeReference<Long>() {});
     }
 }

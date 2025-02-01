@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,7 +20,7 @@ public class Book {
 
     private String title;
 
-    private LocalDateTime publishedDate;
+    private LocalDate publishedDate;
 
     private String blurb;
 
@@ -34,9 +34,17 @@ public class Book {
 
     private Double price;
 
-    private String genre;
+    private Genre genre;
 
-    private Integer amountInStock;
+    private Long pageCount;
+
+    private String synopsis;
+
+    private Long likes;
+
+    private Long dislikes;
+
+//    private Integer amountInStock;
 
     private Integer amountSold;
 

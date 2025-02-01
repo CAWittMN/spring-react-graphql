@@ -1,4 +1,4 @@
-package com.example.graphql_books.models;
+package com.example.graphql_publisher.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,8 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Publisher {
 
@@ -19,14 +19,11 @@ public class Publisher {
     private Long id;
 
     private String name;
-
     private String address;
-
+    private String city;
+    private String state;
+    private String zip;
+    private String country;
     private String phoneNumber;
-
     private String email;
-
-    private String website;
-
-
 }

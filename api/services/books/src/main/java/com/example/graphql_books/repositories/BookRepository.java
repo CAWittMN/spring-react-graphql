@@ -16,11 +16,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // also note that author, genre, and publisher are other tables so a join is needed for these fields
     @Query("SELECT b FROM Book b " +
             "LEFT JOIN b.genre g " +
-            "LEFT JOIN b.publisher p " +
             "WHERE (:#{#params.title} IS NULL OR b.title LIKE %:#{#params.title}%) " +
             "AND (:#{#params.genre} IS NULL OR g.name LIKE %:#{#params.genre}%) " +
-            "AND (:#{#params.publisher} IS NULL OR p.name LIKE %:#{#params.publisher}%) " +
             "AND (:#{#params.pageCount} IS NULL OR b.pageCount = :#{#params.pageCount})")
     Optional<List<Book>> findByFilter(FilterParams params);
+
+    Optional<List<Book>> findByAuthorId(Long authorId);
+
+    Optional<List<Book>> findByGenreName(String genre);
+
+    Optional<List<Book>> findByPublisherId(Long publisherId);
+
+    // find by like title not case sensitive
+    Optional<List<Book>> findByTitle(String title);
 
 }

@@ -5,6 +5,7 @@ import com.example.graphql_gateway.services.ReviewService;
 import com.example.graphql_gateway.services.UserService;
 import com.example.graphql_gateway.types.Purchase;
 import com.example.graphql_gateway.types.Review;
+import com.example.graphql_gateway.types.ReviewLike;
 import com.example.graphql_gateway.types.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -42,6 +43,16 @@ public class UserResolver {
     @SchemaMapping(typeName = "User", field = "reviews")
     public Flux<Review> getReviews(User user) {
         return reviewService.getReviewsByUserId(user.getId());
+    }
+
+    @SchemaMapping(typeName = "User", field = "reviewLikes")
+    public Flux<ReviewLike> getReviewLikes(User user) {
+        return reviewService.getReviewLikesByUserId(user.getId());
+    }
+
+    @SchemaMapping(typeName = "User", field = "purchasedBookIds")
+    public Flux<Long> getPurchasedBookIds(User user) {
+        return purchaseService.getPurchasedBookIdsByUserId(user.getId());
     }
 
 

@@ -10,21 +10,14 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = BookPurchaseMapper.class)
 public interface PurchasesMapper {
 
-    @Mapping(target = "bookIds", expression = "java(source.getBookPurchases().stream().map(bookPurchase -> bookPurchase.getBookId()).toList())")
-    @Mapping(target = "userId", source = "user.id")
     PurchasesDTO toDTO(Purchase source);
 
-    @Mapping(target = "bookIds", expression = "java(source.getBookPurchases().stream().map(bookPurchase -> bookPurchase.getBookId()).toList())")
-    @Mapping(target = "userId", source = "user.id")
     List<PurchasesDTO> toDTOList(List<Purchase> source);
 
-    List<BookPurchase> toEntityListFromRequest(List<BookPurchaseRequest> source);
+    List<Purchase> toEntityList(List<PurchasesDTO> source);
 
-    @Mapping(target = "bookPurchases", ignore = true)
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    Purchase toEntityFromRequest(PurchaseRequest source);
+    Purchase toEntity(PurchasesDTO source);
 }

@@ -110,12 +110,6 @@ public class BookService {
         if (filter.getMaxPublishedDate() != null) {
             urlSafeFilterParams.append("maxPublishedDate=").append(filter.getMaxPublishedDate()).append("&");
         }
-        if (filter.getMinAmountInStock() != null) {
-            urlSafeFilterParams.append("minAmountInStock=").append(filter.getMinAmountInStock()).append("&");
-        }
-        if (filter.getMaxAmountInStock() != null) {
-            urlSafeFilterParams.append("maxAmountInStock=").append(filter.getMaxAmountInStock()).append("&");
-        }
         if (filter.getMinOverallRating() != null) {
             urlSafeFilterParams.append("minRating=").append(filter.getMinOverallRating()).append("&");
         }

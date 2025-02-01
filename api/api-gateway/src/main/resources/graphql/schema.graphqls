@@ -10,7 +10,7 @@ type Query {
     author(id: Int): Author
     publishers: [Publisher]
     publisher(id: Int): Publisher
-    reviews(bookId: Int): [Review]
+    reviewsByBookId(bookId: Int): [Review]
     userReviews(userId: Int): [Review]
     review(id: Int): Review
     purchasesByUserId(userId: Int): [Purchase]
@@ -20,29 +20,39 @@ type Query {
 }
 
 type Mutation {
-    makePurchase(purchase: PurchaseInput): Purchase
-    postReview(review: ReviewInput): Review
+    makePurchase(purchaseInput: PurchaseInput): Purchase
+    postReview(reviewInput: ReviewInput): Review
     editReview(id: Int, review: ReviewInput): Review
     deleteReview(id: Int): Review
+    likeOrDislikeReview(likeOrDislike: LikeOrDislikeReviewInput): Boolean
     cancelPurchase(id: Int): Boolean
 }
 
 type Book {
     id: Int
     title: String
-    genre: String
+    genre: Genre
     price: Float
     blurb: String
     authorId: Int
+    pageCount: Int
+    language: String
     author: Author
     isbn: String
     publishedDate: String
     publisherId: Int
     publisher: Publisher
+    likes: Int
+    dislikes: Int
     overallRating: Float
     reviews: [Review]
     amountSold: Int
-    amountInStock: Int
+
+}
+
+type Genre {
+    id: Int
+    name: String
 }
 
 type Author {
@@ -72,24 +82,37 @@ type Review {
     body: String
     createdAt: String
     userId: Int
-    username: String
+    user: User
+    isLiked: Boolean
+    isDisliked: Boolean
+    likesAndDislikes: [ReviewLike]
+    totalLikes: Int
+    totalDislikes: Int
+}
+
+type ReviewLike {
+    id: Int
+    reviewId: Int
+    userId: Int
+    isLiked: Boolean
+    isDisliked: Boolean
 }
 
 type User {
     id: Int
     firstName: String
     lastName: String
-    email: String
-    phone: String
     role: String
     reviews: [Review]
     purchases: [Purchase]
     purchasedBookIds: [Int]
+    reviewLikes: [ReviewLike]
 }
 
 type Purchase {
     id: Int
     userId: Int
+    user: User
     totalAmount: Float
     status: String
     purchaseDate: String
@@ -134,11 +157,20 @@ input BookPurchaseInput {
     totalPrice: Float
 }
 
+input LikeOrDislikeReviewInput {
+    reviewId: Int
+    userId: Int
+    like: Boolean
+    dislike: Boolean
+}
+
 input ReviewInput {
     bookId: Int
     rating: Int
     title: String
     body: String
     userId: Int
+    isLiked: Boolean
+    isDisliked: Boolean
 }
 

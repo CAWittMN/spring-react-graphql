@@ -5,7 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,14 +24,21 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private User user;
+    private Long userId;
 
-    @OneToMany(mappedBy = "purchase")
+    @CreationTimestamp
+    private LocalDateTime purchaseDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdated;
+
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
     private List<BookPurchase> bookPurchases;
 
-    private Double total;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal totalAmount;
 
-    private PurchaseStatus status;
+    @Enumerated(EnumType.STRING)
+    private PurchaseStatus status = PurchaseStatus.PENDING;
 
 }

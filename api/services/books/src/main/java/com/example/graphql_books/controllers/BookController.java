@@ -29,6 +29,31 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
+    @GetMapping("/author/{authorId}")
+    public List<BookDTO> getBooksByAuthor(@PathVariable Long authorId) {
+        return bookService.getBooksByAuthor(authorId);
+    }
+
+    @GetMapping("/genre/{genre}")
+    public List<BookDTO> getBooksByGenre(@PathVariable String genre) {
+        return bookService.getBooksByGenre(genre);
+    }
+
+    @GetMapping("/publisher/{publisherId}")
+    public List<BookDTO> getBooksByPublisher(@PathVariable Long publisherId) {
+        return bookService.getBooksByPublisher(publisherId);
+    }
+
+    @GetMapping("/title/{title}")
+    public List<BookDTO> getBooksByTitle(@PathVariable String title) {
+        return bookService.getBooksByTitle(title);
+    }
+
+    @GetMapping("/ids")
+    public List<BookDTO> getBooksByIds(@RequestParam List<Long> ids){
+        return bookService.getBooksByIds(ids);
+    }
+
     @GetMapping("/filter")
     public List<BookDTO> getBooksByFilter(@ModelAttribute FilterParams params){
         return bookService.getBooksByFilter(params);

@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = LikeOrDislikeMapper.class)
 public interface ReviewMapper {
 
     ReviewDTO toDTO(Review source);

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mapstruct.Mapper;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,12 +17,16 @@ public class PurchasesDTO {
 
     private Long id;
 
-    private List<Long> bookIds;
-
     private Long userId;
 
-    private Double total;
+    private BigDecimal totalAmount;
 
-    private PurchaseStatus status;
+    private List<BookPurchaseDTO> bookPurchases;
+
+    private LocalDateTime purchaseDate;
+
+    private LocalDateTime lastUpdated;
+
+    private PurchaseStatus status = PurchaseStatus.PENDING;
 
 }

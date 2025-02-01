@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.lang.model.element.NestingKind;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +27,16 @@ public class BookDTO {
 
     private String blurb;
 
+    private Long pageCount;
+
+    private String synopsis;
+
     private Long authorId;
 
     private Long publisherId;
 
     private Double price;
 
-    private String genre;
+    private GenreDTO genre;
 
 }
